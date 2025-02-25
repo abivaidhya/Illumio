@@ -75,7 +75,7 @@ Please have your flow log file
 3. Run the script:
 
 Go to bash
-Navigat to the folder
+Navigate to the folder
 python3 main.py
 
 Output
