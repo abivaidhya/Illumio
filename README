@@ -1,0 +1,131 @@
+Illumio Flow Log Analyzer
+summary
+=====
+
+...start of the summary
+
+This project is designed to help you process and analyze flow log data by associating
+service tags with the corresponding port/protocol combinations. After parsing the logs,
+it generates a CSV report that shows the count of each service tag based on the flow logs.
+
+..end of the summary
+
+Key Assumptions
+---------------
+
+Log Format: 
+    The program only works with the default flow log format. If your logs have a different
+    format, this might cause issues, and those lines may be skipped.
+
+Flow Log Version: 
+    This program is built to work with version 2 of the flow log format.
+    Using another version may result in errors or incorrect parsing.
+
+Lookup Table Format: 
+    We expect the lookup table to be a simple CSV file with three columns: destination port, protocol
+    (like tcp, udp, icmp), and the corresponding service tag.
+
+Features
+--------
+
+Flow Log Parsing: 
+    The program reads and parses space-separated flow log files containing fields
+    like source/destination IP, source/destination port, protocol, etc.
+
+Lookup Table Integration: 
+    It matches the destination port and protocol in the flow log with a service tag from
+    a lookup table, allowing you to classify the flow data accordingly.
+
+Error Handling: 
+    Any lines in the flow log that don’t match the expected format are skipped, and the
+    program logs a warning about those lines.
+
+Report Generation: 
+    It outputs a CSV file that summarizes the service tags along with the count of
+    occurrences for each port/protocol combination.
+
+File Breakdown
+--------------
+
+flow_logs.txt: This is file that you want to analyze which is space-separated with specific columns.
+lookup_table.csv: This CSV file contains the mapping of destination ports and protocols to service tags
+(e.g., sv_P1, sv_P2).
+main.py: This is the Python script that parse the flow logs, matching them to service tags, and
+generating the report.
+output.csv: The final output CSV file, which contains a summary of service tags and their associated counts.
+
+How to Run the Project
+----------------------
+
+Prerequisites
+Python 3.x: You’ll need Python 3 to run this project.
+No extra libraries needed since the program uses only Python’s built-in libraries.
+
+Steps to Run the Program
+------------------------
+
+1. Clone the repository:
+git clone git@github.com:abivaidhya/Illumio.git
+cd Illumio
+
+2. Prepare your files:
+Please have your flow log file 
+(flow_logs.txt) and your lookup table file (lookup_table.csv) in the same directory as main.py.
+
+3. Run the script:
+
+Go to bash
+Navigat to the folder
+python3 main.py
+
+Output
+------
+
+After running the script, the program will parse your flow logs and generate an output CSV file (output.csv),
+containing the service tags and their counts.
+Any lines that can’t be parsed will be skipped, and the program will log a warning message about them.
+
+Example Output:
+In bash, Output written to output.csv
+
+Here’s an example of how the (output.csv) will look:
+
+Service Tag	Port/Protocol Count
+sv_P1	5
+sv_P2	10
+sv_P3	3
+...	...
+
+
+Testing and Validation
+----------------------
+
+Tests Performed:
+1.Basic Parsing: 
+    We tested the program with flow logs containing various IPs, ports, and protocols to make sure it
+    associates service tags correctly.
+2. Error Handling: 
+    We also tested the program with malformed lines to confirm that it skips them and logs a warning.
+3. Known Limitations:
+    The program only supports the default flow log format.
+    It assumes the log is version 2; other versions may cause issues.
+    Custom protocols or ports not in the lookup table will be skipped and won’t have any tags assigned.
+
+
+Code Insights
+-------------
+
+Log Parsing: 
+    The script splits each line into parts and checks if the destination port and protocol are valid. 
+    If something’s off, the line gets skipped.
+
+Mapping:
+    Using the lookup table, the program matches the flow log’s destination port and protocol with a
+    service tag, which is then associated with the log.
+
+Error Handling:
+    Any malformed or missing data in the logs is skipped, and the program outputs a warning message for
+    each issue.
+
+Generating the Report: 
+    The program writes a CSV file summarizing the service tags and their counts based on the parsed flow logs.
